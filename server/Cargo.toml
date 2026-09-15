@@ -1,0 +1,21 @@
+[package]
+name = "fomoxa-example-server"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[[bin]]
+name = "fomoxa-example-server"
+path = "src/main.rs"
+
+[[bin]]
+name = "fomoxa-example-bot"
+path = "src/bin/bot.rs"
+
+[[bin]]
+name = "fomoxa-example-bench"
+path = "src/bin/bench.rs"
+
+[dependencies]
+fomoxa-net = "0.1.1"
+fomoxa-attributes = "0.1.1"

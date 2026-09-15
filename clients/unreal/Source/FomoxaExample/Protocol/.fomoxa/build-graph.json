@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "generator": "fomoxac 0.2.0",
+  "schema_fingerprint": "sha256:c179c08cbf3096609dbc2d1cf7dac4d93c2f53c155cf4fdf421fa3ad472f7345",
+  "sha256_of": "each file with its `// generated-at:` line emptied, so an unchanged schema keeps an unchanged digest",
+  "sources": {
+    "Models/protocol.hpp": {
+      "models": [
+        "ClientHello",
+        "PlayerInput",
+        "PlayerState",
+        "Welcome",
+        "WorldSnapshot"
+      ],
+      "outputs": [
+        {
+          "path": "Generated/client_hello_game.hpp",
+          "model": "ClientHello",
+          "codec": "game",
+          "fingerprint": "sha256:1d75366230b9d0ef68ee449a36f64e88439183e2eedff1da0cf7ebd551f44f1e",
+          "sha256": "9d0d079f1378a9b5c7d57985015e823fa4881f94ba7fd10bd632734d3d42be64"
+        },
+        {
+          "path": "Generated/player_input_game.hpp",
+          "model": "PlayerInput",
+          "codec": "game",
+          "fingerprint": "sha256:b12f80f42bd84e528439e71ad050e1ec6736bc1bf38bf6d7cd1e3948d1367439",
+          "sha256": "8d5d792afa50e1e0ac2e2e935e0b77741e468c4be6ba59c2ca7910bdd4a46992"
+        },
+        {
+          "path": "Generated/player_state_game.hpp",
+          "model": "PlayerState",
+          "codec": "game",
+          "fingerprint": "sha256:841f5f0775c65445c2d9c9c6a532ee11522104c9f7d1d9195384d1488129dacd",
+          "sha256": "412cf0af18cd87ec443a39c18dacda2dd84f69f963280f6bac49d302c615d564"
+        },
+        {
+          "path": "Generated/welcome_game.hpp",
+          "model": "Welcome",
+          "codec": "game",
+          "fingerprint": "sha256:2d2df98b821dcd9d354a5eedca3353043dd13d64615e70b325e0789c1c1fd4ee",
+          "sha256": "9510ad48718dcf780973e923e3728369cbec0753c5a527a230388f27b18f3b3c"
+        },
+        {
+          "path": "Generated/world_snapshot_game.hpp",
+          "model": "WorldSnapshot",
+          "codec": "game",
+          "fingerprint": "sha256:3966ddba99fe7647b3b8bcac62ece223b4143800040a73d0854fc3c7f3788724",
+          "sha256": "f44389c8be3fb1960ae03b5f7b2b97a38cca74734cc74714b0eed00c8313632b"
+        }
+      ]
+    }
+  },
+  "shared": [
+    {
+      "path": "Generated/runtime.hpp",
+      "kind": "runtime",
+      "sha256": "e06043226f4fe22677681c9720ee519600c617d3ad60bf0726491f8caa41adc4"
+    },
+    {
+      "path": "Generated/handshake.hpp",
+      "kind": "handshake",
+      "sha256": "3291cf3c3b2f8f5238b0aef0be518e89a29975f89e63e0039dd1c837ca02c8bf"
+    }
+  ]
+}

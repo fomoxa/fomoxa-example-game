@@ -1,0 +1,33 @@
+[package]
+name = "fomoxa-example-baseline"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[[bin]]
+name = "baseline-codec"
+path = "src/bin/codec.rs"
+
+[[bin]]
+name = "baseline-net-server"
+path = "src/bin/net_server.rs"
+
+[[bin]]
+name = "baseline-net-bench"
+path = "src/bin/net_bench.rs"
+
+[[bin]]
+name = "baseline-tcp-server"
+path = "src/bin/tcp_server.rs"
+
+[[bin]]
+name = "baseline-tcp-bench"
+path = "src/bin/tcp_bench.rs"
+
+[dependencies]
+prost = "0.14"
+fomoxa-net = "0.1.1"
+fomoxa-example-server = { path = "../server" }
+
+[profile.release]
+debug = false

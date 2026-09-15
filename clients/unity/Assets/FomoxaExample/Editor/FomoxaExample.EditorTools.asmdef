@@ -1,0 +1,19 @@
+{
+    "name": "FomoxaExample.EditorTools",
+    "rootNamespace": "FomoxaExample.EditorTools",
+    "references": [
+        "FomoxaExample.Networking",
+        "FomoxaExample.Game"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

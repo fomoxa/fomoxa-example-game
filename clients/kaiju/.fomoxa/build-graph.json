@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "generator": "fomoxac 0.2.0",
+  "schema_fingerprint": "sha256:c179c08cbf3096609dbc2d1cf7dac4d93c2f53c155cf4fdf421fa3ad472f7345",
+  "sha256_of": "each file with its `// generated-at:` line emptied, so an unchanged schema keeps an unchanged digest",
+  "sources": {
+    "network/models/protocol.go": {
+      "models": [
+        "ClientHello",
+        "PlayerInput",
+        "PlayerState",
+        "Welcome",
+        "WorldSnapshot"
+      ],
+      "outputs": [
+        {
+          "path": "network/generated/client_hello_game.go",
+          "model": "ClientHello",
+          "codec": "game",
+          "fingerprint": "sha256:1d75366230b9d0ef68ee449a36f64e88439183e2eedff1da0cf7ebd551f44f1e",
+          "sha256": "37d3f648311c8647e47f3c7eb9b67ae221bbeac9bd122017d063656f9c417068"
+        },
+        {
+          "path": "network/generated/player_input_game.go",
+          "model": "PlayerInput",
+          "codec": "game",
+          "fingerprint": "sha256:b12f80f42bd84e528439e71ad050e1ec6736bc1bf38bf6d7cd1e3948d1367439",
+          "sha256": "52714506eff948bd6b8c57b5c606f6096a5553fcb456dea379d950c951911d0e"
+        },
+        {
+          "path": "network/generated/player_state_game.go",
+          "model": "PlayerState",
+          "codec": "game",
+          "fingerprint": "sha256:841f5f0775c65445c2d9c9c6a532ee11522104c9f7d1d9195384d1488129dacd",
+          "sha256": "4f4c9988e9ab8d999cf7ca882c2b6efcaa53620712dbff2cac314e1d018b2b3e"
+        },
+        {
+          "path": "network/generated/welcome_game.go",
+          "model": "Welcome",
+          "codec": "game",
+          "fingerprint": "sha256:2d2df98b821dcd9d354a5eedca3353043dd13d64615e70b325e0789c1c1fd4ee",
+          "sha256": "f14fad5ce65f8dfc01779042d05df417b9b6c459e457b43f19e5d6c6b709b1f6"
+        },
+        {
+          "path": "network/generated/world_snapshot_game.go",
+          "model": "WorldSnapshot",
+          "codec": "game",
+          "fingerprint": "sha256:3966ddba99fe7647b3b8bcac62ece223b4143800040a73d0854fc3c7f3788724",
+          "sha256": "0f989cdbddc607a5a8e06ca7129dfe636877e5bcab07619b36c9cfd3ef457778"
+        }
+      ]
+    }
+  },
+  "shared": [
+    {
+      "path": "network/generated/runtime.go",
+      "kind": "runtime",
+      "sha256": "a6e783ae9e8976e7c1bb0d48005b977a0e0212f126c50391f94e2afc95ee40d9"
+    },
+    {
+      "path": "network/generated/handshake.go",
+      "kind": "handshake",
+      "sha256": "c52e489abbe1cc508d6084a130f880896f2fdb3cbd57b25c67862a04212111bf"
+    }
+  ]
+}

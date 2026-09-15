@@ -1,0 +1,391 @@
+{
+  "schema_version": 1,
+  "generator": "fomoxac 0.2.0",
+  "fingerprint": "sha256:c179c08cbf3096609dbc2d1cf7dac4d93c2f53c155cf4fdf421fa3ad472f7345",
+  "fingerprint_u64": "0xC179C08CBF309660",
+  "models": {
+    "ClientHello": {
+      "source": "Models/ClientHello.cs",
+      "fingerprint": "sha256:30700e5257639ef88a6268aad40378ab6a09b7b2a1024af41d612b1f608a0571",
+      "codecs": [
+        "game"
+      ],
+      "fields": [
+        {
+          "name": "ClientKind",
+          "type": "u8",
+          "codecs": [
+            "game"
+          ]
+        },
+        {
+          "name": "DisplayName",
+          "type": "string",
+          "codecs": [
+            "game"
+          ]
+        }
+      ],
+      "messages": {
+        "game": {
+          "id": "0xACEB4840",
+          "fingerprint": "sha256:1d75366230b9d0ef68ee449a36f64e88439183e2eedff1da0cf7ebd551f44f1e",
+          "fingerprint_u64": "0x1D75366230B9D0EF",
+          "prefixes": [
+            "sha256:bac7a1a8f670d68001078ec41c0f9874a97bf581f923320a029d45d9f0cd7115",
+            "sha256:1d75366230b9d0ef68ee449a36f64e88439183e2eedff1da0cf7ebd551f44f1e"
+          ],
+          "prefixes_u64": [
+            "0xBAC7A1A8F670D680",
+            "0x1D75366230B9D0EF"
+          ],
+          "fields": [
+            {
+              "name": "ClientKind",
+              "type": "u8"
+            },
+            {
+              "name": "DisplayName",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    "PlayerInput": {
+      "source": "Models/PlayerInput.cs",
+      "fingerprint": "sha256:074cf527667fdf49f774262cc2ddc7578d27399d20ddc2db9901c5c572708cdd",
+      "codecs": [
+        "game"
+      ],
+      "fields": [
+        {
+          "name": "Sequence",
+          "type": "u32",
+          "codecs": [
+            "game"
+          ]
+        },
+        {
+          "name": "MoveX",
+          "type": "f32",
+          "codecs": [
+            "game"
+          ]
+        },
+        {
+          "name": "MoveZ",
+          "type": "f32",
+          "codecs": [
+            "game"
+          ]
+        },
+        {
+          "name": "Jump",
+          "type": "bool",
+          "codecs": [
+            "game"
+          ]
+        },
+        {
+          "name": "LookYaw",
+          "type": "f32",
+          "codecs": [
+            "game"
+          ]
+        },
+        {
+          "name": "LookPitch",
+          "type": "f32",
+          "codecs": [
+            "game"
+          ]
+        }
+      ],
+      "messages": {
+        "game": {
+          "id": "0x6984A5A4",
+          "fingerprint": "sha256:b12f80f42bd84e528439e71ad050e1ec6736bc1bf38bf6d7cd1e3948d1367439",
+          "fingerprint_u64": "0xB12F80F42BD84E52",
+          "prefixes": [
+            "sha256:e80972cc3424521bd044ade2ec49f7b96984dcc43efe7bebb95fcd6ca79c9edc",
+            "sha256:ffd5ed0a3874cc2bdbb2df0af345c13fd3de353898278cf474f02070901e437f",
+            "sha256:5de3d616c00c317656557390913009125874603e8d0115eb2f4efdaf121eb319",
+            "sha256:22a1574907fb41082de197f26193b522a5fedd130d049f33e10f8920e8a4caa1",
+            "sha256:409606ac2e28759f87f0783896063b49d1f26f525e13ff3a0940b76bc92be181",
+            "sha256:b12f80f42bd84e528439e71ad050e1ec6736bc1bf38bf6d7cd1e3948d1367439"
+          ],
+          "prefixes_u64": [
+            "0xE80972CC3424521B",
+            "0xFFD5ED0A3874CC2B",
+            "0x5DE3D616C00C3176",
+            "0x22A1574907FB4108",
+            "0x409606AC2E28759F",
+            "0xB12F80F42BD84E52"
+          ],
+          "fields": [
+            {
+              "name": "Sequence",
+              "type": "u32"
+            },
+            {
+              "name": "MoveX",
+              "type": "f32"
+            },
+            {
+              "name": "MoveZ",
+              "type": "f32"
+            },
+            {
+              "name": "Jump",
+              "type": "bool"
+            },
+            {
+              "name": "LookYaw",
+              "type": "f32"
+            },
+            {
+              "name": "LookPitch",
+              "type": "f32"
+            }
+          ]
+        }
+      }
+    },
+    "PlayerState": {
+      "source": "Models/PlayerState.cs",
+      "fingerprint": "sha256:3372a54d0570757702e98db91dd435c0551ae011a9cee31ceb08b01432e7808d",
+      "codecs": [
+        "game"
+      ],
+      "fields": [
+        {
+          "name": "PlayerId",
+          "type": "u32",
+          "codecs": [
+            "game"
+          ]
+        },
+        {
+          "name": "ClientKind",
+          "type": "u8",
+          "codecs": [
+            "game"
+          ]
+        },
+        {
+          "name": "Color",
+          "type": "u32",
+          "codecs": [
+            "game"
+          ]
+        },
+        {
+          "name": "PositionX",
+          "type": "f32",
+          "codecs": [
+            "game"
+          ]
+        },
+        {
+          "name": "PositionZ",
+          "type": "f32",
+          "codecs": [
+            "game"
+          ]
+        },
+        {
+          "name": "PositionY",
+          "type": "f32",
+          "codecs": [
+            "game"
+          ]
+        },
+        {
+          "name": "LookYaw",
+          "type": "f32",
+          "codecs": [
+            "game"
+          ]
+        },
+        {
+          "name": "LookPitch",
+          "type": "f32",
+          "codecs": [
+            "game"
+          ]
+        }
+      ],
+      "messages": {
+        "game": {
+          "id": "0x9C787B03",
+          "fingerprint": "sha256:841f5f0775c65445c2d9c9c6a532ee11522104c9f7d1d9195384d1488129dacd",
+          "fingerprint_u64": "0x841F5F0775C65445",
+          "prefixes": [
+            "sha256:4042091069c386ac38c4f5ea1349ebd907f705a354342697b6a556a25ca9cd27",
+            "sha256:5b88618af7c9587833be89e39b5618a022580738540b46e30472d7e591ab7874",
+            "sha256:4756e491ac625a05e8cbfe18da0fbfa5fbe22459e379e511e4905195d489ef19",
+            "sha256:3ec7147492e1d88e9c8a2b225995f61e198ee7820c16af29a7215ed54a0d7fe2",
+            "sha256:b10152fd1556df79c2fc17fabdbc1912064409d16ddf85218e15cf81da44cbd1",
+            "sha256:3a4d6ec8a2e907c1d05cb948f487f62b8a88bcbbb4d7fc610837759c71790488",
+            "sha256:79bcd37e1b8f43c03ea45fbddf88d3f63a8e5355cb4f2eab776fa0fa2bc42f73",
+            "sha256:841f5f0775c65445c2d9c9c6a532ee11522104c9f7d1d9195384d1488129dacd"
+          ],
+          "prefixes_u64": [
+            "0x4042091069C386AC",
+            "0x5B88618AF7C95878",
+            "0x4756E491AC625A05",
+            "0x3EC7147492E1D88E",
+            "0xB10152FD1556DF79",
+            "0x3A4D6EC8A2E907C1",
+            "0x79BCD37E1B8F43C0",
+            "0x841F5F0775C65445"
+          ],
+          "fields": [
+            {
+              "name": "PlayerId",
+              "type": "u32"
+            },
+            {
+              "name": "ClientKind",
+              "type": "u8"
+            },
+            {
+              "name": "Color",
+              "type": "u32"
+            },
+            {
+              "name": "PositionX",
+              "type": "f32"
+            },
+            {
+              "name": "PositionZ",
+              "type": "f32"
+            },
+            {
+              "name": "PositionY",
+              "type": "f32"
+            },
+            {
+              "name": "LookYaw",
+              "type": "f32"
+            },
+            {
+              "name": "LookPitch",
+              "type": "f32"
+            }
+          ]
+        }
+      }
+    },
+    "Welcome": {
+      "source": "Models/Welcome.cs",
+      "fingerprint": "sha256:a4bec7001dac7205fd9661016667f476e14124e1f1006051bdc82634014e8148",
+      "codecs": [
+        "game"
+      ],
+      "fields": [
+        {
+          "name": "PlayerId",
+          "type": "u32",
+          "codecs": [
+            "game"
+          ]
+        },
+        {
+          "name": "PlaneHalfSize",
+          "type": "f32",
+          "codecs": [
+            "game"
+          ]
+        },
+        {
+          "name": "TickRate",
+          "type": "u16",
+          "codecs": [
+            "game"
+          ]
+        }
+      ],
+      "messages": {
+        "game": {
+          "id": "0x00876FB0",
+          "fingerprint": "sha256:2d2df98b821dcd9d354a5eedca3353043dd13d64615e70b325e0789c1c1fd4ee",
+          "fingerprint_u64": "0x2D2DF98B821DCD9D",
+          "prefixes": [
+            "sha256:dd3552e402dffd5749b814dea16c3b63c4f92fe8b025352918ff1a374c301750",
+            "sha256:55618608f9bb4b86e669d8cbea3d7ab943d6e69a8766efcfa38fa17104b9d7bc",
+            "sha256:2d2df98b821dcd9d354a5eedca3353043dd13d64615e70b325e0789c1c1fd4ee"
+          ],
+          "prefixes_u64": [
+            "0xDD3552E402DFFD57",
+            "0x55618608F9BB4B86",
+            "0x2D2DF98B821DCD9D"
+          ],
+          "fields": [
+            {
+              "name": "PlayerId",
+              "type": "u32"
+            },
+            {
+              "name": "PlaneHalfSize",
+              "type": "f32"
+            },
+            {
+              "name": "TickRate",
+              "type": "u16"
+            }
+          ]
+        }
+      }
+    },
+    "WorldSnapshot": {
+      "source": "Models/WorldSnapshot.cs",
+      "fingerprint": "sha256:90f8e2c1eb849b57b422ad528ea0e8584ac6738f0e1ba40115c29b5d8beaf3d0",
+      "codecs": [
+        "game"
+      ],
+      "fields": [
+        {
+          "name": "Tick",
+          "type": "u32",
+          "codecs": [
+            "game"
+          ]
+        },
+        {
+          "name": "Players",
+          "type": "Array<PlayerState>",
+          "codecs": [
+            "game"
+          ]
+        }
+      ],
+      "messages": {
+        "game": {
+          "id": "0x7DDE7B54",
+          "fingerprint": "sha256:3966ddba99fe7647b3b8bcac62ece223b4143800040a73d0854fc3c7f3788724",
+          "fingerprint_u64": "0x3966DDBA99FE7647",
+          "prefixes": [
+            "sha256:3d1d4e1f22fef15f7aec0d0200a5b17f0e45c224b5aea91ecbc201e43da85240",
+            "sha256:3966ddba99fe7647b3b8bcac62ece223b4143800040a73d0854fc3c7f3788724"
+          ],
+          "prefixes_u64": [
+            "0x3D1D4E1F22FEF15F",
+            "0x3966DDBA99FE7647"
+          ],
+          "fields": [
+            {
+              "name": "Tick",
+              "type": "u32"
+            },
+            {
+              "name": "Players",
+              "type": "Array<PlayerState>"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

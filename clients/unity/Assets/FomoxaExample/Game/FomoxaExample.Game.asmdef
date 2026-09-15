@@ -1,0 +1,16 @@
+{
+    "name": "FomoxaExample.Game",
+    "rootNamespace": "FomoxaExample.Game",
+    "references": [
+        "FomoxaExample.Networking"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

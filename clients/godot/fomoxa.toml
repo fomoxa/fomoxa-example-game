@@ -1,0 +1,2 @@
+src = "network/models"
+out = "network/generated"

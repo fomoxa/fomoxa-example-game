@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "generator": "fomoxac 0.2.0",
+  "schema_fingerprint": "sha256:c179c08cbf3096609dbc2d1cf7dac4d93c2f53c155cf4fdf421fa3ad472f7345",
+  "sha256_of": "each file with its `// generated-at:` line emptied, so an unchanged schema keeps an unchanged digest",
+  "sources": {
+    "network/models/client_hello.gd": {
+      "models": [
+        "ClientHello"
+      ],
+      "outputs": [
+        {
+          "path": "network/generated/client_hello_game.gd",
+          "model": "ClientHello",
+          "codec": "game",
+          "fingerprint": "sha256:1d75366230b9d0ef68ee449a36f64e88439183e2eedff1da0cf7ebd551f44f1e",
+          "sha256": "ae49e7d62c9c68785c6fa8f4bc40b758bf6002d5fb86228683fae4c3a1f62e9a"
+        }
+      ]
+    },
+    "network/models/player_input.gd": {
+      "models": [
+        "PlayerInput"
+      ],
+      "outputs": [
+        {
+          "path": "network/generated/player_input_game.gd",
+          "model": "PlayerInput",
+          "codec": "game",
+          "fingerprint": "sha256:b12f80f42bd84e528439e71ad050e1ec6736bc1bf38bf6d7cd1e3948d1367439",
+          "sha256": "d28a27f7dcbbb614e62f1aa8056ddb66b83911cb0f0e1293ceb55da6dac1d47a"
+        }
+      ]
+    },
+    "network/models/player_state.gd": {
+      "models": [
+        "PlayerState"
+      ],
+      "outputs": [
+        {
+          "path": "network/generated/player_state_game.gd",
+          "model": "PlayerState",
+          "codec": "game",
+          "fingerprint": "sha256:841f5f0775c65445c2d9c9c6a532ee11522104c9f7d1d9195384d1488129dacd",
+          "sha256": "40537a8fc56bbc1fa086243e1cb8d323e9b6f82ee0c6eca6126d60857b88fb27"
+        }
+      ]
+    },
+    "network/models/welcome.gd": {
+      "models": [
+        "Welcome"
+      ],
+      "outputs": [
+        {
+          "path": "network/generated/welcome_game.gd",
+          "model": "Welcome",
+          "codec": "game",
+          "fingerprint": "sha256:2d2df98b821dcd9d354a5eedca3353043dd13d64615e70b325e0789c1c1fd4ee",
+          "sha256": "63d7c9adad216da3bd07406ac8f4b329ae1f2540cdc538e3f0f17703c6da84c3"
+        }
+      ]
+    },
+    "network/models/world_snapshot.gd": {
+      "models": [
+        "WorldSnapshot"
+      ],
+      "outputs": [
+        {
+          "path": "network/generated/world_snapshot_game.gd",
+          "model": "WorldSnapshot",
+          "codec": "game",
+          "fingerprint": "sha256:3966ddba99fe7647b3b8bcac62ece223b4143800040a73d0854fc3c7f3788724",
+          "sha256": "dadbfd5406be63b11ac68b8f4edd999df499e125af352e630c7d4118010515a6"
+        }
+      ]
+    }
+  },
+  "shared": [
+    {
+      "path": "network/generated/runtime.gd",
+      "kind": "runtime",
+      "sha256": "3a5e857c86bbd1b8f4349aeb88bfeaf02b59cdbd38095dfab0823b65aa56b8c2"
+    },
+    {
+      "path": "network/generated/handshake.gd",
+      "kind": "handshake",
+      "sha256": "fd086284450f9da07ed41205bbd7ccf5523a94e88c21b4d2141dfad372391d3b"
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "generator": "fomoxac 0.2.0",
+  "schema_fingerprint": "sha256:c179c08cbf3096609dbc2d1cf7dac4d93c2f53c155cf4fdf421fa3ad472f7345",
+  "sha256_of": "each file with its `// generated-at:` line emptied, so an unchanged schema keeps an unchanged digest",
+  "sources": {
+    "src/models/protocol.rs": {
+      "models": [
+        "ClientHello",
+        "PlayerInput",
+        "PlayerState",
+        "Welcome",
+        "WorldSnapshot"
+      ],
+      "outputs": [
+        {
+          "path": "src/generated/client_hello_game.rs",
+          "model": "ClientHello",
+          "codec": "game",
+          "fingerprint": "sha256:1d75366230b9d0ef68ee449a36f64e88439183e2eedff1da0cf7ebd551f44f1e",
+          "sha256": "9eb34e5b29e777009f8a3bfc63b1ad701d4e90131dae29255c1a634a1d0430cf"
+        },
+        {
+          "path": "src/generated/player_input_game.rs",
+          "model": "PlayerInput",
+          "codec": "game",
+          "fingerprint": "sha256:b12f80f42bd84e528439e71ad050e1ec6736bc1bf38bf6d7cd1e3948d1367439",
+          "sha256": "9447d69f0e44451f3d63fa2ca2c1fca1a3affbf8fc2369013ece69394d4fc965"
+        },
+        {
+          "path": "src/generated/player_state_game.rs",
+          "model": "PlayerState",
+          "codec": "game",
+          "fingerprint": "sha256:841f5f0775c65445c2d9c9c6a532ee11522104c9f7d1d9195384d1488129dacd",
+          "sha256": "bb8c1677a8352e81377ceb7745f726e33463b950648670d799ea5c492773d9c5"
+        },
+        {
+          "path": "src/generated/welcome_game.rs",
+          "model": "Welcome",
+          "codec": "game",
+          "fingerprint": "sha256:2d2df98b821dcd9d354a5eedca3353043dd13d64615e70b325e0789c1c1fd4ee",
+          "sha256": "0977fb153ecbf7676ea824386924f4fafd04ed2de8b7b2f2b89720be0ce98475"
+        },
+        {
+          "path": "src/generated/world_snapshot_game.rs",
+          "model": "WorldSnapshot",
+          "codec": "game",
+          "fingerprint": "sha256:3966ddba99fe7647b3b8bcac62ece223b4143800040a73d0854fc3c7f3788724",
+          "sha256": "474ff879cb5d9cb98c830a0dd54cb41ab531fd33cbf03bb51723803b969fb129"
+        }
+      ]
+    }
+  },
+  "shared": [
+    {
+      "path": "src/generated/runtime.rs",
+      "kind": "runtime",
+      "sha256": "7111781991144c7d29597664dfeb69c681f07095a2562f54ae49282ec5a2f6b2"
+    },
+    {
+      "path": "src/generated/handshake.rs",
+      "kind": "handshake",
+      "sha256": "7c5b32a2fd1a45af59f3a8c106a6684020e6dd974d55a57f2dd80e2bce7fd8ee"
+    },
+    {
+      "path": "src/generated/mod.rs",
+      "kind": "root",
+      "sha256": "ab3786c360af59c441e72816857df7502d81fdaae2ce4fa217c55aba62da0235"
+    }
+  ]
+}

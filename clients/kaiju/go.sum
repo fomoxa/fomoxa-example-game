@@ -1,0 +1,4 @@
+github.com/fomoxa/go v0.1.1-0.20260915163803-396aa01ffc30 h1:eOstnGQa73IVBRB638a0mcfBDo7X9jTY+9PZB17HHuE=
+github.com/fomoxa/go v0.1.1-0.20260915163803-396aa01ffc30/go.mod h1:xtNgWxtjcqAqfZoHS1ZV6iM3ZrzVm+iEhi4alKFuYPo=
+golang.org/x/sys v0.48.0 h1:bbX/i/6MgT9BVLM9RT1thmxL04yeTAhbEz4SyadbXoo=
+golang.org/x/sys v0.48.0/go.mod h1:hNLxWAXmnKAxqDtdwIYC4bM9oQPEecfsnNMuSxOs3og=
