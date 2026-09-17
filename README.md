@@ -74,67 +74,11 @@ server/target/release/fomoxa-example-bench --codec 1000
 
 This measures the pure loop without sockets, including `Vec` allocation per pass. This explains why the encode column in the tick breakdown is nearly zero: encoding a 1000-player snapshot takes 10 µs, whereas sending it to 1000 peers takes 13,000 µs.
 
-### Baseline: Protobuf Comparison
-
-Three baselines in [baseline/](baseline/), using `prost` (derive, no `protoc` required), sharing the same simulation logic (the demo's `World`) and same measurement code (the `measure` module shared by all load generators):
-
-| Baseline | Replaces What | Answers What Question |
-|---|---|---|
-| 1. codec-only | only compares `fomoxac` vs `prost`, no sockets | how much faster/slower is the Fomoxa codec compared to Protobuf? |
-| 2. `protobuf-net` | keeps fomoxa-net intact, only swaps the payload to protobuf | how much does the system change when swapping the codec? |
-| 3. `protobuf-tcp` | raw TCP + custom framing (5-byte header) + protobuf | what is the overhead of the fomoxa-net session layer? |
-
-```sh
-tools/baseline.sh
-tools/baseline.sh --bots=2000 --seconds=15 --repeats=1
-```
-
-Baseline 1 - codec (1000 players, 20,000 iterations, median of 3 runs):
-
-| Codec | Encode | Decode | Bytes per player |
-|---|---|---|---|
-| `fomoxac` | 10.2 µs · 10.2 ns/player · 2.66 GiB/s | 19.1 µs · 19.1 ns/player · 1.42 GiB/s | 29.0 |
-| `prost` (protobuf) | 21.9 µs · 21.9 ns/player · 1.48 GiB/s | 47.6 µs · 47.6 ns/player · 0.68 GiB/s | 34.9 |
-
-The Fomoxa codec is ~2.1x faster at encoding, ~2.5x faster at decoding, and 17% smaller. Reason for the smaller size: Fomoxa's wire format omits field tags, whereas protobuf incurs 1 byte of tag overhead for each field per player.
-
-Baselines 2 and 3 - 1000 bots, 20 seconds:
-
-| Stack | p50 | p95 | p99 | Received | Snapshot Size | Encode/tick | Send/tick | Server CPU | Server RSS |
-|---|---|---|---|---|---|---|---|---|---|
-| fomoxa | 22.7 ms | 39.4 ms | 43.2 ms | 100% | 29,008 B | 0.03 ms | 12.91 ms | 0.56 vCPU | 84 MiB |
-| protobuf-net | 23.0 ms | 40.1 ms | 43.8 ms | 100% | 30,137 B | 0.09 ms | 13.34 ms | 0.57 vCPU | 86 MiB |
-| protobuf-tcp | 22.9 ms | 39.8 ms | 43.8 ms | 100% | 30,135 B | 0.09 ms | 13.00 ms | 0.54 vCPU | 40 MiB |
-
-At 1000 players, the three stacks are indistinguishable: a 0.3 ms delta in p50, 0.6 ms delta in p99, and a 0.03 vCPU difference - exactly as predicted by the tick breakdown, since a codec that is twice as fast only saves 0.06 ms in a 33.3 ms tick. This is bilateral evidence: the Fomoxa codec is faster than Protobuf, and in this workload, that fact does not change anything.
-
-Two notable details from the table:
-
-- The on-the-wire protobuf snapshot is only 30,137 B, not 34,862 B like the micro-benchmark, because protobuf omits zero-value fields, and in the swarm, 900 bots send `look_pitch = 0`, with the majority standing on the floor (`position_y = 0`). This advantage is still insufficient to beat Fomoxa's 29,008 B.
-- `protobuf-tcp` consumes only 40 MiB RSS because the custom `Link` allocates a single 64 KiB read buffer shared across all peers, whereas fomoxa-net allocates a 64 KiB `recv_buf` per connection (`vec![0; config.recv_buffer_size]`). The 44 MiB difference aligns exactly with 1000 × 64 KiB minus untouched pages.
-
-At 2000 players (saturated, each stack run 2 times):
-
-| Stack | Tick Achieved | p99 |
-|---|---|---|
-| fomoxa | 18.3 and 17.3 Hz | 82.4 and 81.5 ms |
-| protobuf-net | 17.4 and 18.8 Hz | 81.3 and 76.1 ms |
-| protobuf-tcp | 20.1 and 20.9 Hz | 74.7 and 71.8 ms |
-
-When hitting the ceiling, differences emerge, and they are unfavorable to fomoxa-net: the raw TCP stack maintains roughly 10–15% higher tick rate, despite its protobuf payload being 3% larger. The cause is evident from the phase table: both phases are cheaper - `events` 3.8–4.0 ms compared to 5.0–5.5 ms, `send` 41.8–43.4 ms compared to 47.5–50.3 ms. The fomoxa-net session layer (11-byte framing, probes/heartbeats, outbox discipline, per-peer bookkeeping) incurs this exact overhead. Between `fomoxa` and `protobuf-net`, the difference at the breaking point falls within run-to-run variance, meaning swapping the codec does not shift the bottleneck.
-
-What this baseline is not fair about or does not answer:
-
-- `protobuf-tcp` lacks handshake, schema negotiation, probe/heartbeat, and message id - this is intentional: it serves as a floor, not a functionally equivalent competitor.
-- The baseline decodes protobuf into `prost` structs, then copies 6 fields into the demo's model to call `apply_input`; for the snapshot direction, it builds the protobuf struct directly from the `World`, avoiding additional allocations.
-- This is Protobuf in Rust via prost. It implies nothing about protobuf in C++/Go/C#, nor does it provide comparisons against FlatBuffers, Cap'n Proto, or other engine protocols.
-- This remains a single-machine loopback test. Over a real network, the 3% byte overhead of protobuf becomes meaningful.
-
 ### What These Numbers Mean to You
 
 If you are building a game and selecting a netcode stack. Single-threaded, 1000 concurrent players, each receiving the full state of 999 others 30 times per second, p99 43.6 ms. That p99 figure primarily represents tick wait time (one tick is 33 ms): to reduce latency, you must increase the tick rate or add client-side prediction; swapping the protocol will yield no benefit. If your game does not broadcast full state to everyone - i.e., nearly all real games - then 1000 is not your ceiling.
 
-If you are evaluating Fomoxa against another stack. The wire format costs 29 bytes per player (8 fields, no field tags on the wire), encodes at 10 ns/player, decodes at 19 ns/player - 2.1x faster than `prost` for encoding, 2.5x faster for decoding, and 17% smaller (see baseline table above). However, that same table shows that at 1000 players, systems using Fomoxa and Protobuf differ by 0.3 ms p50 and 0.03 vCPU, rendering them indistinguishable. The critical comparison lies in the I/O model and sending strategy, not serialization speed - and there, a raw TCP stack outperforms fomoxa-net by 10–15% under saturation.
+If you are evaluating Fomoxa against another stack. The wire format costs 29 bytes per player (8 fields, no field tags on the wire), and encoding a 1000-player snapshot takes 10 µs. Inside this workload the codec is 0.07% of a tick, so what decides the result is the I/O model and sending strategy, not serialization speed. This benchmark measures only Fomoxa; codec-against-codec numbers (size, encode, decode, plain TCP) are in [fomoxa/fomoxa-codec-bench](https://github.com/fomoxa/fomoxa-codec-bench).
 
 If you are operating it. 1000 connections consume 85 MiB RSS, roughly 85 KB per connection, largely dictated by the default 64 KiB `recv_buffer_size` in `Config` - each `Connection` allocates its own buffer. Testing with `recv_buffer_size = 8 KiB`: RSS drops to 49 MiB while maintaining a 30 Hz tick, 43.3 ms p99, and 0.56 vCPU, sacrificing nothing. This is the fastest way to reduce RAM footprint when the server only processes small messages like `PlayerInput`. CPU usage is merely 0.57 vCPU at 1000 players, so your primary concern is bandwidth (830 MiB/s at 1000 players, scaling quadratically), not CPU. Because the server is single-threaded, adding cores natively will not help: you must shard players across multiple processes or partition the `send` loop.
 
@@ -170,14 +114,14 @@ tools/bench.sh --bots=1000 --input-hz=120
 
 - The demo broadcasts full snapshots to all players every tick, causing bandwidth to scale quadratically: 1000 players equates to 29 KB × 1000 peers × 30 Hz. This is a worst-case scenario, reflecting the demo's design rather than the runtime's limit. A production game would filter by visibility or send deltas, reducing bandwidth by orders of magnitude and supporting significantly higher concurrency.
 - The server intentionally operates on a single thread for code readability. The `send` loop - the sole bottleneck - is entirely parallelizable; these figures do not represent architectural limits.
-- Baselines exist, but only along one axis. Comparisons with Protobuf (`prost`) cover three tiers: pure codec, swapped codec in the same stack, and a raw TCP stack - see [Baseline: Protobuf Comparison](#baseline-protobuf-comparison). No comparisons have been made against other engine runtimes (Unity Netcode, Photon, ENet) or Fomoxa SDKs in other languages; doing so requires reimplementing this specific workload on those stacks and benchmarking on the same hardware.
+- There is no cross-stack baseline here: this benchmark measures only Fomoxa running this game. The only anchor is the isolated codec cost above. No comparisons have been made against other engine runtimes (Unity Netcode, Photon, ENet); doing so requires reimplementing this workload on those stacks and benchmarking on the same hardware. A pure format comparison with Protobuf, outside any game, lives in [fomoxa/fomoxa-codec-bench](https://github.com/fomoxa/fomoxa-codec-bench).
 
 ## Requirements
 
 | Tool | Notes |
 |---|---|
 | Rust (cargo) | builds the server and bot |
-| `fomoxac` | `cargo install --git https://github.com/fomoxa/fomoxac` - required only when modifying models, see [Where to Get the Fomoxa Runtime](#where-to-get-the-fomoxa-runtime) |
+| `fomoxac` 0.2.1+ | `cargo install fomoxac` - required only when modifying models, see [Where to Get the Fomoxa Runtime](#where-to-get-the-fomoxa-runtime) |
 | Godot 4.3 | this machine: `~/.local/opt/godot/Godot_v4.3-stable_linux.x86_64` |
 | Unity 6000.5.7f1 | installed on Windows via Unity Hub; WSL requires `rsync` and `powershell.exe` |
 | Unreal Engine 5.8 | installed on Windows; Visual Studio 2022 with the *Game development with C++* workload and .NET Framework 4.8 SDK component (missing this causes UBT to report *Could not find NetFxSDK install dir*) |
@@ -191,19 +135,18 @@ This repository is standalone: cloning it provides everything needed to build an
 | Component | Source | In this repo |
 |---|---|---|
 | `fomoxa-net`, `fomoxa-attributes` - Rust server and bot | crates.io | declared in `server/Cargo.toml`, downloaded automatically via `cargo build` |
-| `fomoxac` - generator | [fomoxa/fomoxac](https://github.com/fomoxa/fomoxac) | installed separately, not tracked in the repo |
+| `fomoxac` - generator | crates.io | installed separately with `cargo install fomoxac`, not tracked in the repo |
 | `github.com/fomoxa/go` - Kaiju | Go module proxy | declared in `clients/kaiju/go.mod`, downloaded automatically via `go build` - no vendor needed |
-| `prost` - Protobuf baseline only | crates.io | declared in `baseline/Cargo.toml`; the main demo crate remains dependency-free outside Fomoxa |
 | Godot addon | [fomoxa/godot](https://github.com/fomoxa/godot) | committed at `clients/godot/addons/fomoxa` |
 | `Fomoxa.Net.dll` - Unity | [fomoxa/csharp](https://github.com/fomoxa/csharp) | committed at `clients/unity/Assets/Plugins` |
 | C runtime + `net.hpp` - Unreal | [fomoxa/c](https://github.com/fomoxa/c) | committed at `clients/unreal/Source/FomoxaExample/ThirdParty/fomoxa` |
 
 The three engine runtimes are committed directly to the repo because Godot, Unity, and Unreal lack native package managers to fetch them during the build process: Godot loads addons from `addons/`, Unity loads DLLs from `Assets/Plugins/`, and UBT compiles C source embedded in the module tree. Committing them also guarantees they match the version tested with this demo, insulating them from `main` drift in the upstream repositories.
 
-`fomoxac` must be installed from git, not crates.io. Version `0.2.0` on crates.io generates C# code lacking an explicit cast (`reader.FieldAbsent() ? 0 : reader.ReadU8()`), resulting in an `int` ternary that fails to compile in Unity; commit `dbe12b5` on `main` fixes this by adding `(byte)0`, but a new release is not yet available. For the other three backends (Rust, GDScript, C++), the crates.io version generates code identical to what is committed here.
+`fomoxac` must be version `0.2.1` or later. Version `0.2.0` generates C# code lacking an explicit cast (`reader.FieldAbsent() ? 0 : reader.ReadU8()`), resulting in an `int` ternary that fails to compile in Unity; `0.2.1` fixes this by adding `(byte)0`. The generated code committed here already includes that fix, but was produced just before the release, so its headers and `.fomoxa/build-graph.json` still record `0.2.0`. Regenerating with `0.2.1` changes only that version string.
 
 ```sh
-cargo install --git https://github.com/fomoxa/fomoxac
+cargo install fomoxac
 ```
 
 Each engine runtime has a dedicated vendor script: it performs a `git clone` from upstream, copies the necessary engine files, and logs the repository URL and commit hash to a `VERSION` file next to the runtime. Never manually copy from an adjacent Fomoxa checkout - doing so obscures the source commit.
@@ -368,7 +311,6 @@ tools/unreal.sh smoke -host=127.0.0.1 -name=unreal-smoke
 tools/kaiju.sh smoke -addr=127.0.0.1:9321 -name=kaiju-smoke -seconds=4 -expect-players=2
 
 tools/bench.sh --bots=100 --seconds=6 --warmup=2
-tools/baseline.sh --bots=100 --seconds=6 --warmup=2 --repeats=1 --rounds=2000
 ```
 
 - The `--editor --quit` command executes once to register `class_name`s in Godot. Without a `.godot/` folder, `--import` in Godot 4.3 exits prematurely before scanning files.
@@ -376,7 +318,7 @@ tools/baseline.sh --bots=100 --seconds=6 --warmup=2 --repeats=1 --rounds=2000
 - Executing the main scene in `--headless` outputs `mesh_get_surface_count ... Parameter "m" is null` due to a dummy renderer; this warning is benign.
 - The Unity smoke test (`FomoxaExample.EditorTools.FomoxaExampleSmokeTest`) executes via editor batchmode rather than Play Mode: it verifies the protocol ↔ Unity coordinate transformation, instantiates a real `FomoxaExampleSession` to join, move, and jump, then validates the look vector identically to Godot. Output is logged under `FOMOXA-EXAMPLE-SMOKE:` inside `clients/unity/Logs/unity-smoke.log`.
 - Initial `tools/unity.sh` runs incur a multi-minute penalty as Unity imports the full project.
-- `tools/bench.sh` outputs `BENCH: PASS` if all bots connect, none drop, and latency samples are valid; `DEGRADED` indicates compromised metrics, referencing the `first loss` line for context. `tools/baseline.sh` performs identical workloads against three stacks and generates a comparison table.
+- `tools/bench.sh` outputs `BENCH: PASS` if all bots connect, none drop, and latency samples are valid; `DEGRADED` indicates compromised metrics, referencing the `first loss` line for context.
 
 ## Modifying the Protocol
 
@@ -398,12 +340,6 @@ server/
   src/bin/bot.rs                              fomoxa-example-bot
   src/bin/bench.rs                            fomoxa-example-bench: Fomoxa bot swarm + codec micro-benchmark
   src/measure.rs                              shared measurement code: windowing, latency, throughput, CPU/RSS, JSON
-baseline/                                     Protobuf comparison (isolated crate, sole consumer of prost)
-  src/protocol.rs                             protobuf model (prost derive, no protoc)
-  src/framing.rs                              5-byte framing + non-blocking Link for raw TCP baseline
-  src/bin/codec.rs                            baseline 1: pure prost encode/decode
-  src/bin/net_server.rs, net_bench.rs         baseline 2: protobuf payload over fomoxa-net
-  src/bin/tcp_server.rs, tcp_bench.rs         baseline 3: protobuf over raw TCP
 clients/godot/
   addons/fomoxa/                              Fomoxa runtime for Godot, via tools/vendor-fomoxa-godot.sh (see VERSION)
   network/models/                             GDScript model
@@ -446,13 +382,9 @@ clients/unreal/
 tools/check-fingerprints.sh
 tools/kaiju.sh                                check / smoke / setup / build / run Kaiju client
 tools/bench.sh                                run server + 100/500/1000 bots, output benchmark table
-tools/baseline.sh                             execute identical workload across 3 stacks (Fomoxa, protobuf+fomoxa-net, protobuf+TCP)
 tools/unity.sh                                check / scene / smoke / open Windows-side Unity project
 tools/unreal.sh                               build / map / smoke / open Windows-side Unreal project
 tools/vendor-fomoxa-godot.sh                  git clone fomoxa/godot into clients/godot, log commit to VERSION
 tools/vendor-fomoxa-csharp.sh                 git clone + build fomoxa/csharp into clients/unity, log commit to VERSION
 tools/vendor-fomoxa-c.sh                      git clone fomoxa/c into clients/unreal, log commit to VERSION
 ```
-<!--  
-sudo mount --bind /mnt/d/code/fomoxa-example-game/clients /home/thanghd/code/fomoxa/fomoxa-example-game/clients
--->
